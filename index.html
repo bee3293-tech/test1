@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동네한바퀴 걷기모임 | 이웃과 함께 걷는 건강한 발걸음</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Pretendard / Noto Sans KR & Gowun Dodum (따뜻한 감성 포인트) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        forest: {
+                            50: '#F2F7F4',
+                            100: '#E0ECE5',
+                            200: '#C2D9CC',
+                            300: '#96BDA8',
+                            400: '#659B80',
+                            500: '#437D61',
+                            600: '#2E5A44', // 메인 포레스트 그린
+                            700: '#254837',
+                            800: '#1F3A2D',
+                            900: '#1A3026',
+                        },
+                        beige: {
+                            50: '#FDFBF7',  // 웜 아이보리 배경
+                            100: '#F7F3EB', // 웜 베이지 섹션 배경
+                            200: '#EDE5D5',
+                            300: '#DFD1B8',
+                            400: '#CBB692',
+                        },
+                        terracotta: {
+                            50: '#FDF5F2',
+                            100: '#FAE8E1',
+                            400: '#E88B6B',
+                            500: '#D97757', // 테라코타 포인트 컬러
+                            600: '#C25E3E',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                        serif: ['"Gowun Dodum"', 'serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 30px -5px rgba(46, 90, 68, 0.08)',
+                        'card': '0 4px 20px -2px rgba(46, 90, 68, 0.06)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FDFBF7;
+            color: #26322C;
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+        }
+        .font-warm {
+            font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif;
+        }
+        /* 커스텀 스크롤바 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F7F3EB;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #96BDA8;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2E5A44;
+        }
+        /* 아코디언 부드러운 전환 */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 240px;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        /* 토스트 애니메이션 */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translate(-50%, 20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+        .toast-enter {
+            animation: slideUpFade 0.3s ease forwards;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-forest-200 selection:text-forest-900">
+
+    <!-- 1. 상단 네비게이션 바 -->
+    <header id="navbar" class="sticky top-0 z-40 w-full bg-beige-50/90 backdrop-blur-md border-b border-beige-200 transition-all">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 sm:h-20">
+                <!-- 로고 -->
+                <a href="#" class="flex items-center gap-2.5 group">
+                    <div class="w-10 h-10 rounded-2xl bg-forest-600 text-white flex items-center justify-center shadow-sm group-hover:bg-forest-700 transition-colors">
+                        <!-- 발자국 & 나뭇잎 SVG 로고 -->
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-lg sm:text-xl tracking-tight text-forest-800 block leading-none">동네한바퀴</span>
+                        <span class="text-[11px] font-medium text-forest-500 tracking-wider">우리 동네 걷기모임</span>
+                    </div>
+                </a>
+
+                <!-- 데스크톱 메뉴 -->
+                <nav class="hidden md:flex items-center gap-7 text-[15px] font-medium text-stone-700">
+                    <a href="#about" class="hover:text-forest-600 transition-colors py-1">모임 소개</a>
+                    <a href="#courses" class="hover:text-forest-600 transition-colors py-1">추천 코스</a>
+                    <a href="#schedule" class="hover:text-forest-600 transition-colors py-1">정기 일정</a>
+                    <a href="#reviews" class="hover:text-forest-600 transition-colors py-1">걷기 후기</a>
+                    <a href="#faq" class="hover:text-forest-600 transition-colors py-1">자주 묻는 질문</a>
+                </nav>
+
+                <!-- 우측 CTA 및 모바일 햄버거 버튼 -->
+                <div class="flex items-center gap-3">
+                    <a href="#join" class="hidden sm:inline-flex items-center gap-1.5 bg-terracotta-500 hover:bg-terracotta-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm hover:shadow transition-all active:scale-95">
+                        <span>모임 참여하기</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </a>
+                    <button id="mobile-menu-btn" type="button" aria-label="메뉴 열기" class="md:hidden p-2.5 rounded-xl text-forest-800 hover:bg-beige-200/70 transition-colors">
+                        <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                        <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 모바일 드롭다운 메뉴 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-beige-50 border-b border-beige-200 px-4 pt-2 pb-5 space-y-1 shadow-lg">
+            <a href="#about" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium text-stone-700 hover:bg-forest-50 hover:text-forest-700">모임 소개</a>
+            <a href="#courses" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium text-stone-700 hover:bg-forest-50 hover:text-forest-700">추천 코스</a>
+            <a href="#schedule" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium text-stone-700 hover:bg-forest-50 hover:text-forest-700">정기 일정</a>
+            <a href="#reviews" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium text-stone-700 hover:bg-forest-50 hover:text-forest-700">걷기 후기</a>
+            <a href="#faq" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium text-stone-700 hover:bg-forest-50 hover:text-forest-700">자주 묻는 질문</a>
+            <div class="pt-2 px-2">
+                <a href="#join" class="mobile-nav-link block w-full text-center bg-terracotta-500 hover:bg-terracotta-600 text-white font-semibold py-3 rounded-xl shadow-sm">
+                    지금 모임 참여하기
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 2. 히어로 섹션 -->
+        <section class="relative overflow-hidden pt-10 pb-16 sm:pt-16 sm:pb-24 bg-gradient-to-b from-beige-100 via-beige-50 to-beige-50">
+            <!-- 배경 은은한 자연 원형 장식 -->
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-forest-200/30 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute top-40 -left-24 w-72 h-72 bg-terracotta-100/50 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+                    <!-- 좌측 카피 & CTA -->
+                    <div class="lg:col-span-7 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-forest-100 text-forest-700 text-xs sm:text-sm font-semibold mb-5">
+                            <span class="w-2 h-2 rounded-full bg-forest-600 animate-pulse"></span>
+                            <span>매주 화·목 저녁 & 토요일 아침 정기 산책</span>
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-forest-900 leading-[1.25] tracking-tight mb-5">
+                            이웃과 함께 걷는 건강한 발걸음,<br>
+                            <span class="text-forest-600 underline decoration-terracotta-400/60 decoration-4 underline-offset-8">우리 동네 한 바퀴</span>
+                        </h1>
+                        <p class="text-base sm:text-lg text-stone-600 leading-relaxed max-w-xl mx-auto lg:mx-0 mb-8 font-warm">
+                            혼자 걸으면 심심하고 작심삼일이 되기 쉽죠. 계절마다 달라지는 우리 동네 공원길과 하천 산책로를 이웃들과 도란도란 이야기 나누며 가볍게 걸어보세요.
+                        </p>
+
+                        <!-- 버튼 그룹 -->
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 mb-10">
+                            <a href="#courses" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-forest-600 hover:bg-forest-700 text-white font-semibold px-7 py-3.5 rounded-2xl shadow-soft transition-all hover:-translate-y-0.5">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                                </svg>
+                                <span>추천 코스 둘러보기</span>
+                            </a>
+                            <a href="#join" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-terracotta-50 text-terracotta-600 border-2 border-terracotta-400/50 font-semibold px-7 py-3.5 rounded-2xl transition-all hover:-translate-y-0.5">
+                                <span>바로 참여 신청하기</span>
+                            </a>
+                        </div>
+
+                        <!-- 핵심 통계 배지 3종 -->
+                        <div class="grid grid-cols-3 gap-3 sm:gap-5 max-w-lg mx-auto lg:mx-0">
+                            <div class="bg-white/90 border border-beige-200 rounded-2xl p-3.5 sm:p-4 text-center shadow-card">
+                                <div class="text-xl sm:text-2xl font-extrabold text-forest-700">148<span class="text-sm font-semibold text-terracotta-500 ml-0.5">명</span></div>
+                                <div class="text-xs sm:text-[13px] text-stone-500 mt-1">함께하는 이웃</div>
+                            </div>
+                            <div class="bg-white/90 border border-beige-200 rounded-2xl p-3.5 sm:p-4 text-center shadow-card">
+                                <div class="text-xl sm:text-2xl font-extrabold text-forest-700">12<span class="text-sm font-semibold text-terracotta-500 ml-0.5">개</span></div>
+                                <div class="text-xs sm:text-[13px] text-stone-500 mt-1">누적 산책 코스</div>
+                            </div>
+                            <div class="bg-white/90 border border-beige-200 rounded-2xl p-3.5 sm:p-4 text-center shadow-card">
+                                <div class="text-xl sm:text-2xl font-extrabold text-forest-700">주 3<span class="text-sm font-semibold text-terracotta-500 ml-0.5">회</span></div>
+                                <div class="text-xs sm:text-[13px] text-stone-500 mt-1">매주 정기 모임</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 우측 깔끔한 SVG 산책 일러스트 그래픽 -->
+                    <div class="lg:col-span-5">
+                        <div class="relative mx-auto max-w-md bg-white p-4 sm:p-6 rounded-[2rem] border border-beige-200 shadow-soft">
+                            <svg viewBox="0 0 420 340" class="w-full h-auto rounded-2xl bg-gradient-to-b from-[#E7F3EC] to-[#F7F2E7]" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- 따뜻한 아침 햇살 -->
+                                <circle cx="330" cy="72" r="36" fill="#FDE68A" opacity="0.85"/>
+                                <circle cx="330" cy="72" r="52" fill="#FDE68A" opacity="0.25"/>
+                                <!-- 뭉게구름 -->
+                                <path d="M75 78C75 68 83 60 93 60C96 50 106 44 117 44C130 44 141 54 142 67C149 69 154 75 154 82C154 91 147 98 138 98H88C80 98 75 90 75 78Z" fill="white" opacity="0.9"/>
+                                <!-- 원경 완만한 언덕 -->
+                                <path d="M0 215C75 165 165 170 245 205C315 235 370 190 420 175V340H0V215Z" fill="#B7D4C3"/>
+                                <path d="M0 240C110 210 210 245 310 220C360 208 395 215 420 225V340H0V240Z" fill="#7CA890"/>
+                                <!-- 구불구불 산책로 (웜 베이지 길) -->
+                                <path d="M145 340C150 295 245 280 230 245C218 218 165 212 185 188" stroke="#F3E8D2" stroke-width="34" stroke-linecap="round"/>
+                                <path d="M145 340C150 295 245 280 230 245C218 218 165 212 185 188" stroke="#DFC9A6" stroke-width="2" stroke-dasharray="6 6"/>
+                                <!-- 나무들 -->
+                                <g transform="translate(58, 165)">
+                                    <rect x="17" y="42" width="6" height="24" rx="3" fill="#7C583E"/>
+                                    <circle cx="20" cy="30" r="22" fill="#2E5A44"/>
+                                    <circle cx="11" cy="36" r="14" fill="#3B6E54"/>
+                                    <circle cx="29" cy="36" r="14" fill="#234735"/>
+                                </g>
+                                <g transform="translate(320, 145)">
+                                    <rect x="15" y="38" width="5" height="22" rx="2.5" fill="#7C583E"/>
+                                    <circle cx="17.5" cy="26" r="19" fill="#437D61"/>
+                                    <circle cx="25" cy="31" r="12" fill="#2E5A44"/>
+                                </g>
+                                <g transform="translate(275, 235)">
+                                    <rect x="12" y="28" width="4" height="16" rx="2" fill="#7C583E"/>
+                                    <circle cx="14" cy="20" r="15" fill="#2E5A44"/>
+                                </g>
+                                <!-- 함께 걷는 이웃 실루엣 1 (테라코타 상의) -->
+                                <g transform="translate(152, 232)">
+                                    <ellipse cx="16" cy="64" rx="12" ry="4" fill="#254837" opacity="0.2"/>
+                                    <circle cx="16" cy="12" r="7.5" fill="#3D2C24"/>
+                                    <path d="M8 24C8 20 24 20 24 24L27 42H5L8 24Z" fill="#D97757"/>
+                                    <path d="M11 42L8 60M21 42L25 59" stroke="#254837" stroke-width="4" stroke-linecap="round"/>
+                                    <path d="M7 26L2 37M25 26L30 35" stroke="#D97757" stroke-width="3.5" stroke-linecap="round"/>
+                                </g>
+                                <!-- 함께 걷는 이웃 실루엣 2 (포레스트 그린 상의) -->
+                                <g transform="translate(192, 226)">
+                                    <ellipse cx="16" cy="66" rx="12" ry="4" fill="#254837" opacity="0.2"/>
+                                    <circle cx="16" cy="11" r="7.5" fill="#2C221E"/>
+                                    <path d="M7 23C7 19 25 19 25 23L27 43H5L7 23Z" fill="#2E5A44"/>
+                                    <path d="M11 43L7 62M21 43L24 61" stroke="#1F3A2D" stroke-width="4" stroke-linecap="round"/>
+                                    <path d="M7 25L2 35M25 25L31 36" stroke="#2E5A44" stroke-width="3.5" stroke-linecap="round"/>
+                                </g>
+                                <!-- 작은 강아지 동반 실루엣 -->
+                                <g transform="translate(234, 272)">
+                                    <ellipse cx="10" cy="18" rx="9" ry="3" fill="#254837" opacity="0.18"/>
+                                    <rect x="4" y="6" width="12" height="7" rx="3.5" fill="#C98A5B"/>
+                                    <circle cx="16" cy="5" r="4" fill="#C98A5B"/>
+                                    <path d="M6 13V17M14 13V17M3 7L1 4" stroke="#A66B40" stroke-width="2" stroke-linecap="round"/>
+                                </g>
+                            </svg>
+                            <!-- 카드 하단 캡션 배지 -->
+                            <div class="mt-4 flex items-center justify-between px-1">
+                                <div>
+                                    <p class="text-xs text-stone-400 font-medium">이번 주 인기 산책길</p>
+                                    <p class="text-sm font-bold text-forest-800">벚꽃 물길따라 생태하천 코스 (4.2km)</p>
+                                </div>
+                                <span class="inline-flex items-center gap-1 text-xs font-semibold bg-terracotta-50 text-terracotta-600 px-3 py-1.5 rounded-full">
+                                    누구나 환영
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 모임 소개 & 특징 -->
+        <section id="about" class="py-16 sm:py-24 bg-beige-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+                    <span class="text-xs font-bold tracking-widest uppercase text-terracotta-500">OUR VALUES</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-forest-900 mt-2 mb-3">부담 없이, 따뜻하게 함께 걷는 이유</h2>
+                    <p class="text-stone-600 text-sm sm:text-base">기록 경쟁이나 무리한 산행이 아닌, 내 몸에 맞는 속도로 걸으며 이웃과 정을 나누는 동네 커뮤니티입니다.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- 특징 카드 1 -->
+                    <div class="bg-white rounded-3xl p-6 border border-beige-200 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-2xl bg-forest-100 text-forest-700 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-forest-900 mb-2">운동 초보자 대환영</h3>
+                        <p class="text-sm text-stone-600 leading-relaxed">평소 숨찬 운동이 부담스러웠던 분들도 괜찮아요. 옆 사람과 편하게 대화할 수 있는 1시간 내외 평지 위주 코스로 시작합니다.</p>
+                    </div>
+
+                    <!-- 특징 카드 2 -->
+                    <div class="bg-white rounded-3xl p-6 border border-beige-200 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-2xl bg-terracotta-100 text-terracotta-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-forest-900 mb-2">반려견 동반 산책</h3>
+                        <p class="text-sm text-stone-600 leading-relaxed">주말 아침에는 댕댕이와 함께 걷는 펫 프렌들리 코스를 운영해요. 목줄 착용과 펫티켓을 지키며 즐겁게 동행합니다.</p>
+                    </div>
+
+                    <!-- 특징 카드 3 -->
+                    <div class="bg-white rounded-3xl p-6 border border-beige-200 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-forest-900 mb-2">주말 아침 상쾌한 힐링</h3>
+                        <p class="text-sm text-stone-600 leading-relaxed">토요일 오전 8시, 맑은 공기를 마시며 숲길과 공원을 걸은 뒤 동네 로컬 카페에서 따뜻한 차 한 잔의 여유를 나눕니다.</p>
+                    </div>
+
+                    <!-- 특징 카드 4 -->
+                    <div class="bg-white rounded-3xl p-6 border border-beige-200 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-forest-900 mb-2">회비 0원, 자유로운 참석</h3>
+                        <p class="text-sm text-stone-600 leading-relaxed">정기 회비나 출석 강요가 전혀 없습니다. 시간이 되는 날 원하는 코스에 가볍게 신청하고 운동화만 신고 나오세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 추천 걷기 코스 (난이도별 필터링 & 상세 모달) -->
+        <section id="courses" class="py-16 sm:py-24 bg-beige-100/80 border-y border-beige-200/70">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest uppercase text-forest-600">WALKING COURSES</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-forest-900 mt-2">우리 동네 추천 걷기 코스</h2>
+                        <p class="text-stone-600 text-sm sm:text-base mt-1.5">카드를 클릭하면 상세 경유지와 준비물 안내를 확인할 수 있어요.</p>
+                    </div>
+
+                    <!-- 난이도별 필터 탭 -->
+                    <div id="course-filters" class="flex flex-wrap gap-2">
+                        <button data-filter="all" class="filter-btn active px-4 py-2 rounded-full text-sm font-semibold bg-forest-600 text-white shadow-sm transition-all">
+                            전체 (6)
+                        </button>
+                        <button data-filter="beginner" class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 hover:bg-forest-50 border border-beige-200 transition-all">
+                            초급(산책형)
+                        </button>
+                        <button data-filter="intermediate" class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 hover:bg-forest-50 border border-beige-200 transition-all">
+                            중급(둘레길)
+                        </button>
+                        <button data-filter="night" class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 hover:bg-forest-50 border border-beige-200 transition-all">
+                            야간/힐링
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 코스 카드 그리드 (JS 렌더링) -->
+                <div id="course-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- JS로 동적 생성 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 이번 주 정기 걷기 일정 & 실시간 참석 신청(RSVP) -->
+        <section id="schedule" class="py-16 sm:py-24 bg-beige-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <span class="text-xs font-bold tracking-widest uppercase text-terracotta-500">WEEKLY SCHEDULE</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-forest-900 mt-2 mb-3">이번 주 정기 걷기 일정</h2>
+                    <p class="text-stone-600 text-sm sm:text-base">원하는 일정의 <strong>'참석 신청'</strong> 버튼을 눌러보세요. 실시간으로 참여 인원이 반영됩니다.</p>
+                </div>
+
+                <!-- 일정 카드 리스트 (JS 렌더링) -->
+                <div id="schedule-list" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- JS로 동적 생성 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. 걷기 기록 계산기 & 이웃 걷기 후기 게시판 -->
+        <section id="reviews" class="py-16 sm:py-24 bg-beige-100/80 border-y border-beige-200/70">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- 좌측: 나의 걷기 칼로리 & 걸음 수 계산기 (5컬럼) -->
+                    <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-beige-200 shadow-soft">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-11 h-11 rounded-2xl bg-forest-600 text-white flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-extrabold text-forest-900">나의 걷기 계산기</h3>
+                                <p class="text-xs text-stone-500">거리 또는 시간으로 예상 걸음·칼로리 확인</p>
+                            </div>
+                        </div>
+
+                        <!-- 입력 기준 선택 탭 -->
+                        <div class="grid grid-cols-2 gap-2 p-1 bg-beige-100 rounded-xl mb-5">
+                            <button type="button" id="calc-mode-dist" class="calc-mode-btn py-2 text-sm font-bold rounded-lg bg-white text-forest-800 shadow-sm transition-all">
+                                거리(km)로 계산
+                            </button>
+                            <button type="button" id="calc-mode-time" class="calc-mode-btn py-2 text-sm font-medium rounded-lg text-stone-600 hover:text-forest-800 transition-all">
+                                시간(분)으로 계산
+                            </button>
+                        </div>
+
+                        <!-- 입력 필드 -->
+                        <div class="space-y-4">
+                            <div>
+                                <label id="calc-input-label" for="calc-value" class="block text-sm font-semibold text-stone-700 mb-1.5">
+                                    걸은 거리 (km)
+                                </label>
+                                <div class="relative">
+                                    <input type="number" id="calc-value" value="4.2" min="0.1" max="100" step="0.1"
+                                        class="w-full px-4 py-3 rounded-xl border border-beige-300 bg-beige-50/50 text-lg font-bold text-forest-900 focus:outline-none focus:ring-2 focus:ring-forest-500 focus:bg-white transition-all">
+                                    <span id="calc-unit" class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-stone-400">km</span>
+                                </div>
+                                <!-- 빠른 선택 칩 -->
+                                <div id="calc-presets" class="flex flex-wrap gap-1.5 mt-2">
+                                    <button type="button" data-val="2.5" class="preset-chip text-xs bg-beige-100 hover:bg-forest-100 text-stone-700 px-2.5 py-1 rounded-lg transition-colors">2.5km (가벼운 산책)</button>
+                                    <button type="button" data-val="4.2" class="preset-chip text-xs bg-beige-100 hover:bg-forest-100 text-stone-700 px-2.5 py-1 rounded-lg transition-colors">4.2km (하천 코스)</button>
+                                    <button type="button" data-val="6.5" class="preset-chip text-xs bg-beige-100 hover:bg-forest-100 text-stone-700 px-2.5 py-1 rounded-lg transition-colors">6.5km (둘레길)</button>
+                                </div>
+                            </div>
+
+                            <!-- 결과 표시 박스 -->
+                            <div class="bg-forest-50 border border-forest-200/80 rounded-2xl p-5 grid grid-cols-2 gap-4">
+                                <div class="text-center border-r border-forest-200 pr-2">
+                                    <span class="text-xs font-medium text-forest-700 block mb-1">예상 걸음 수</span>
+                                    <span id="result-steps" class="text-2xl font-extrabold text-forest-900">5,670</span>
+                                    <span class="text-xs font-semibold text-forest-600 ml-0.5">보</span>
+                                </div>
+                                <div class="text-center pl-2">
+                                    <span class="text-xs font-medium text-terracotta-600 block mb-1">예상 소모 열량</span>
+                                    <span id="result-kcal" class="text-2xl font-extrabold text-terracotta-600">231</span>
+                                    <span class="text-xs font-semibold text-terracotta-500 ml-0.5">kcal</span>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-stone-400 text-center">※ 성인 평균 보폭(약 74cm) 및 보통 걸음 속도(시속 4.5km) 기준 추정치입니다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 우측: 이웃들의 걷기 후기 게시판 & 작성 폼 (7컬럼) -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div>
+                            <span class="text-xs font-bold tracking-widest uppercase text-forest-600">NEIGHBOR REVIEWS</span>
+                            <h3 class="text-2xl font-extrabold text-forest-900 mt-1">이웃들의 생생한 걷기 후기</h3>
+                        </div>
+
+                        <!-- 새 후기 작성 폼 -->
+                        <form id="review-form" class="bg-white rounded-3xl p-5 sm:p-6 border border-beige-200 shadow-card space-y-3.5">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label for="review-author" class="sr-only">닉네임</label>
+                                    <input type="text" id="review-author" required maxlength="15" placeholder="닉네임 (예: 초록발걸음)"
+                                        class="w-full px-3.5 py-2.5 rounded-xl border border-beige-300 bg-beige-50/40 text-sm focus:outline-none focus:ring-2 focus:ring-forest-500 focus:bg-white">
+                                </div>
+                                <div>
+                                    <label for="review-course" class="sr-only">다녀온 코스</label>
+                                    <select id="review-course" required
+                                        class="w-full px-3.5 py-2.5 rounded-xl border border-beige-300 bg-beige-50/40 text-sm text-stone-700 focus:outline-none focus:ring-2 focus:ring-forest-500 focus:bg-white">
+                                        <option value="벚꽃 물길따라 생태하천 코스">벚꽃 물길따라 생태하천 코스</option>
+                                        <option value="중앙공원 메타세쿼이아 숲길">중앙공원 메타세쿼이아 숲길</option>
+                                        <option value="남산자락 전망대 둘레길">남산자락 전망대 둘레길</option>
+                                        <option value="별빛 수변공원 야간 힐링길">별빛 수변공원 야간 힐링길</option>
+                                        <option value="댕댕이와 함께하는 햇살 잔디길">댕댕이와 함께하는 햇살 잔디길</option>
+                                        <option value="옛기찻길 은행나무 산책로">옛기찻길 은행나무 산책로</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-2.5">
+                                <input type="text" id="review-content" required maxlength="120" placeholder="오늘 함께 걸었던 소감이나 코스 추천 한마디를 남겨주세요!"
+                                    class="flex-1 px-3.5 py-2.5 rounded-xl border border-beige-300 bg-beige-50/40 text-sm focus:outline-none focus:ring-2 focus:ring-forest-500 focus:bg-white">
+                                <button type="submit" class="bg-forest-600 hover:bg-forest-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shrink-0">
+                                    후기 등록
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- 후기 카드 목록 (JS 렌더링) -->
+                        <div id="review-list" class="space-y-3.5 max-h-[430px] overflow-y-auto pr-1">
+                            <!-- JS로 동적 생성 -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. 모임 가입 신청 폼 & 자주 묻는 질문(FAQ) -->
+        <section id="join" class="py-16 sm:py-24 bg-beige-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    
+                    <!-- 좌측: 모임 가입 신청 폼 (6컬럼) -->
+                    <div class="lg:col-span-6">
+                        <div class="bg-white rounded-[2rem] p-6 sm:p-9 border border-beige-200 shadow-soft">
+                            <span class="inline-block text-xs font-bold tracking-widest uppercase text-terracotta-500 mb-2">JOIN US</span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-forest-900 mb-2">동네한바퀴 신규 이웃 신청</h2>
+                            <p class="text-sm text-stone-600 mb-6">간단한 정보만 남겨주시면 이번 주 모임 집결 안내와 오픈채팅방 초대장을 보내드려요.</p>
+
+                            <form id="join-form" class="space-y-4">
+                                <div>
+                                    <label for="join-name" class="block text-sm font-semibold text-stone-700 mb-1.5">이름 또는 닉네임 <span class="text-terracotta-500">*</span></label>
+                                    <input type="text" id="join-name" required placeholder="예: 김산책 / 동네이웃"
+                                        class="w-full px-4 py-3 rounded-xl border border-beige-300 bg-beige-50/40 text-sm focus:outline-none focus:ring-2 focus:ring-forest-500 focus:bg-white">
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="join-time" class="block text-sm font-semibold text-stone-700 mb-1.5">선호 시간대</label>
+                                        <select id="join-time" class="w-full px-4 py-3 rounded-xl border border-beige-300 bg-beige-50/40 text-sm text-stone-700 focus:outline-none focus:ring-2 focus:ring-forest-500 focus:bg-white">
+                                            <option value="주말 아침 (토요일 08:00)">주말 아침 (토요일 08:00)</option>
+                                            <option value="평일 저녁 (화·목 19:30)">평일 저녁 (화·목 19:30)</option>
+                                            <option value="평일·주말 모두 좋아요">평일·주말 모두 좋아요</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="join-level" class="block text-sm font-semibold text-stone-700 mb-1.5">선호 걷기 난이도</label>
+                                        <select id="join-level" class="w-full px-4 py-3 rounded-xl border border-beige-300 bg-beige-50/40 text-sm text-stone-700 focus:outline-none focus:ring-2 focus:ring-forest-500 focus:bg-white">
+                                            <option value="초급 (가벼운 평지 산책)">초급 (가벼운 평지 산책)</option>
+                                            <option value="중급 (숲길·둘레길 트레킹)">중급 (숲길·둘레길 트레킹)</option>
+                                            <option value="야간/힐링 (느긋한 야경 산책)">야간/힐링 (느긋한 야경 산책)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="join-message" class="block text-sm font-semibold text-stone-700 mb-1.5">이웃들에게 전하는 한마디</label>
+                                    <textarea id="join-message" rows="3" placeholder="예: 이사 온 지 얼마 안 됐는데 동네 분들과 건강하게 걷고 싶어요!"
+                                        class="w-full px-4 py-3 rounded-xl border border-beige-300 bg-beige-50/40 text-sm focus:outline-none focus:ring-2 focus:ring-forest-500 focus:bg-white resize-none"></textarea>
+                                </div>
+
+                                <button type="submit" class="w-full bg-terracotta-500 hover:bg-terracotta-600 text-white font-bold py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all active:scale-[0.99]">
+                                    모임 가입 신청 완료하기
+                                </button>
+                            </form>
+
+                            <!-- 신청 완료 환영 배너 (제출 시 표시) -->
+                            <div id="join-success-box" class="hidden mt-5 p-5 rounded-2xl bg-forest-50 border border-forest-200 text-forest-900">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-forest-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 id="join-welcome-title" class="font-bold text-base text-forest-900">환영합니다!</h4>
+                                        <p id="join-welcome-desc" class="text-sm text-forest-700 mt-1 leading-relaxed"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 우측: 자주 묻는 질문 FAQ 아코디언 (6컬럼) -->
+                    <div id="faq" class="lg:col-span-6 flex flex-col justify-center">
+                        <span class="text-xs font-bold tracking-widest uppercase text-forest-600 mb-2">FAQ</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-forest-900 mb-3">자주 묻는 질문</h2>
+                        <p class="text-sm text-stone-600 mb-6">처음 오시는 이웃분들이 가장 많이 궁금해하시는 내용을 모았습니다.</p>
+
+                        <div class="space-y-3" id="faq-container">
+                            <!-- FAQ 1 -->
+                            <div class="faq-item active bg-white rounded-2xl border border-beige-200 overflow-hidden shadow-card">
+                                <button type="button" class="faq-trigger w-full flex items-center justify-between p-5 text-left font-bold text-forest-900 hover:bg-beige-50/70 transition-colors">
+                                    <span>Q1. 처음 참여하는데 어떤 준비물이 필요한가요?</span>
+                                    <svg class="faq-icon w-5 h-5 text-forest-600 transition-transform duration-300 shrink-0 ml-3" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                                <div class="faq-answer px-5 text-sm text-stone-600 leading-relaxed">
+                                    <div class="pb-5 pt-1 border-t border-beige-100">
+                                        별도의 전문 등산 장비는 필요하지 않습니다. 발이 편한 <strong>운동화(워킹화)</strong>와 <strong>개인 생수(텀블러)</strong>만 챙겨오시면 충분해요. 저녁 산책 시에는 체온 유지를 위한 가벼운 바람막이나 겉옷을 권장합니다.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 2 -->
+                            <div class="faq-item bg-white rounded-2xl border border-beige-200 overflow-hidden shadow-card">
+                                <button type="button" class="faq-trigger w-full flex items-center justify-between p-5 text-left font-bold text-forest-900 hover:bg-beige-50/70 transition-colors">
+                                    <span>Q2. 비가 오거나 미세먼지가 심한 날에는 어떻게 진행하나요?</span>
+                                    <svg class="faq-icon w-5 h-5 text-forest-600 transition-transform duration-300 shrink-0 ml-3" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                                <div class="faq-answer px-5 text-sm text-stone-600 leading-relaxed">
+                                    <div class="pb-5 pt-1 border-t border-beige-100">
+                                        이웃분들의 안전과 건강이 최우선입니다. 모임 시작 <strong>2시간 전 기상청 예보 기준</strong> 강수 확률이 높거나 미세먼지 '매우 나쁨' 단계일 경우, 해당 일정은 자동 순연되며 신청자분들께 즉시 알림을 드립니다.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 3 -->
+                            <div class="faq-item bg-white rounded-2xl border border-beige-200 overflow-hidden shadow-card">
+                                <button type="button" class="faq-trigger w-full flex items-center justify-between p-5 text-left font-bold text-forest-900 hover:bg-beige-50/70 transition-colors">
+                                    <span>Q3. 가입비나 정기 회비가 있나요?</span>
+                                    <svg class="faq-icon w-5 h-5 text-forest-600 transition-transform duration-300 shrink-0 ml-3" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                                <div class="faq-answer px-5 text-sm text-stone-600 leading-relaxed">
+                                    <div class="pb-5 pt-1 border-t border-beige-100">
+                                        <strong>가입비 및 정기 회비는 0원</strong>입니다! 동네 주민들이 자발적으로 운영하는 순수 비영리 산책 모임이므로 금전적 부담이 전혀 없습니다. 산책 후 희망자에 한해 진행하는 티타임 음료 비용만 각자 부담(더치페이)합니다.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 4 -->
+                            <div class="faq-item bg-white rounded-2xl border border-beige-200 overflow-hidden shadow-card">
+                                <button type="button" class="faq-trigger w-full flex items-center justify-between p-5 text-left font-bold text-forest-900 hover:bg-beige-50/70 transition-colors">
+                                    <span>Q4. 혼자 신청해도 어색하지 않을까요? 체력이 약한데 괜찮나요?</span>
+                                    <svg class="faq-icon w-5 h-5 text-forest-600 transition-transform duration-300 shrink-0 ml-3" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                                <div class="faq-answer px-5 text-sm text-stone-600 leading-relaxed">
+                                    <div class="pb-5 pt-1 border-t border-beige-100">
+                                        현재 활동 중인 회원의 <strong>80% 이상이 혼자 처음 오신 분들</strong>입니다! 출발 전 5분간 가벼운 스트레칭과 자기소개 시간을 갖고, 걷기 리더가 맨 앞과 맨 뒤에서 속도를 맞춰드리기 때문에 낙오 걱정 없이 편하게 걸으실 수 있어요.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 8. 푸터 -->
+    <footer class="bg-forest-900 text-beige-100 pt-14 pb-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-forest-800">
+                <!-- 브랜드 및 소개 -->
+                <div>
+                    <div class="flex items-center gap-2.5 mb-3">
+                        <div class="w-9 h-9 rounded-xl bg-forest-700 text-beige-50 flex items-center justify-center">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+                            </svg>
+                        </div>
+                        <span class="font-extrabold text-lg text-white">동네한바퀴 걷기모임</span>
+                    </div>
+                    <p class="text-sm text-forest-200 leading-relaxed">
+                        멀리 떠나지 않아도 충분한 휴식이 되는 시간.<br>
+                        우리 동네 골목과 공원, 하천길을 이웃과 함께 걸으며 건강한 일상을 만듭니다.
+                    </p>
+                </div>
+
+                <!-- 기본 집결지 안내 -->
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-3">주요 집결지 안내</h4>
+                    <ul class="space-y-2 text-sm text-forest-200">
+                        <li class="flex items-start gap-2">
+                            <span class="text-terracotta-400 font-bold">•</span>
+                            <span><strong>평일 저녁:</strong> 생태하천 수변무대 앞 시계탑 (19:30 출발)</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-terracotta-400 font-bold">•</span>
+                            <span><strong>주말 아침:</strong> 중앙공원 동문 느티나무 쉼터 (08:00 출발)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 운영진 비상 연락 및 맨 위로 -->
+                <div class="flex flex-col justify-between items-start md:items-end">
+                    <div class="md:text-right">
+                        <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-3">운영진 문의 및 비상 연락</h4>
+                        <p class="text-sm text-forest-200">운영 리더: 숲길지기 (010-1234-5678)</p>
+                        <p class="text-xs text-forest-300 mt-1">카카오톡 오픈채팅: #동네한바퀴걷기모임</p>
+                    </div>
+                    <button type="button" id="scroll-top-btn" class="mt-6 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-forest-800 hover:bg-forest-700 text-xs font-semibold text-beige-100 border border-forest-700 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+                        </svg>
+                        <span>맨 위로 이동</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-forest-300 gap-2">
+                <p>© 2026 동네한바퀴 걷기모임. All rights reserved.</p>
+                <p>함께 걸으면 길이 됩니다 🌿</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 코스 상세 정보 모달 -->
+    <div id="course-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-forest-950/60 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden border border-beige-200 shadow-2xl transform transition-all" role="dialog" aria-modal="true">
+            <!-- 상단 컬러 헤더 -->
+            <div id="modal-header-bg" class="p-6 bg-forest-600 text-white relative">
+                <button type="button" id="close-modal-btn" aria-label="모달 닫기" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/20 hover:bg-black/30 text-white flex items-center justify-center transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                <span id="modal-badge" class="inline-block text-xs font-bold px-3 py-1 rounded-full bg-white/20 mb-2">초급(산책형)</span>
+                <h3 id="modal-title" class="text-2xl font-extrabold">코스 이름</h3>
+                <div class="flex items-center gap-4 mt-2 text-sm text-white/90">
+                    <span id="modal-distance">거리: 4.2km</span>
+                    <span>•</span>
+                    <span id="modal-duration">소요시간: 약 60분</span>
+                </div>
+            </div>
+
+            <!-- 본문 상세 경로 및 준비물 -->
+            <div class="p-6 space-y-5">
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1.5">집합 장소</h4>
+                    <p id="modal-meeting" class="text-sm font-bold text-forest-800 bg-beige-100 px-3.5 py-2.5 rounded-xl"></p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1.5">상세 산책 경로</h4>
+                    <p id="modal-route" class="text-sm text-stone-700 leading-relaxed bg-forest-50/70 p-3.5 rounded-xl border border-forest-100"></p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1.5">코스 특징 및 추천 준비물</h4>
+                    <p id="modal-tips" class="text-sm text-stone-600 leading-relaxed"></p>
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" id="modal-apply-btn" class="flex-1 bg-terracotta-500 hover:bg-terracotta-600 text-white font-bold py-3 rounded-xl transition-colors">
+                        이 코스로 참여 신청하기
+                    </button>
+                    <button type="button" id="modal-close-bottom" class="px-5 py-3 rounded-xl border border-beige-300 text-sm font-semibold text-stone-600 hover:bg-beige-100 transition-colors">
+                        닫기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 토스트 알림 컨테이너 -->
+    <div id="toast-container" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col items-center gap-2 w-full max-w-sm px-4"></div>
+
+    <!-- JavaScript 인터랙션 로직 -->
+    <script>
+        // ==========================================
+        // 1. 초기 데이터 정의
+        // ==========================================
+        const COURSES_DATA = [
+            {
+                id: 1,
+                title: '벚꽃 물길따라 생태하천 코스',
+                category: 'beginner',
+                categoryLabel: '초급(산책형)',
+                distance: '4.2 km',
+                duration: '약 60분',
+                meeting: '생태하천 수변무대 앞 시계탑',
+                summary: '완만한 데크길과 잔잔한 물소리를 들으며 걷는 우리 모임 대표 입문 코스입니다.',
+                route: '수변무대 시계탑 출발 → 버드나무 쉼터 → 징검다리 포토존 → 메타세쿼이아 반환점 → 출발지 복귀',
+                tips: '계단이 거의 없는 평지 우레탄·데크길이라 유모차나 초보자도 편안합니다. 편한 운동화와 생수 한 병만 챙겨오세요.'
+            },
+            {
+                id: 2,
+                title: '중앙공원 메타세쿼이아 숲길',
+                category: 'beginner',
+                categoryLabel: '초급(산책형)',
+                distance: '3.5 km',
+                duration: '약 50분',
+                meeting: '중앙공원 동문 느티나무 쉼터',
+                summary: '울창한 나무 그늘 아래 피톤치드를 마시며 도란도란 걷기 좋은 아침 힐링 코스입니다.',
+                route: '동문 느티나무 쉼터 → 야생화 정원 → 메타세쿼이아 사잇길 → 숲속 책방 앞 광장',
+                tips: '햇볕이 강한 날에도 나무 그늘이 80% 이상이어서 쾌적합니다. 산책 후 인근 로컬 베이커리 카페에서 티타임이 이어집니다.'
+            },
+            {
+                id: 3,
+                title: '남산자락 전망대 둘레길',
+                category: 'intermediate',
+                categoryLabel: '중급(둘레길)',
+                distance: '6.8 km',
+                duration: '약 100분',
+                meeting: '남산 체육공원 입구 안내판 앞',
+                summary: '적당한 오르막과 흙길이 어우러져 상쾌한 땀방울과 탁 트인 동네 전경을 선물합니다.',
+                route: '체육공원 입구 → 소나무 능선길 → 해맞이 전망대(15분 휴식) → 약수터 갈림길 → 하산 완료',
+                tips: '완만한 경사의 흙길과 나무 계단이 포함되어 있어 접지력이 좋은 트레킹화나 운동화를 권장합니다. 간식(견과류 등) 지참 추천!'
+            },
+            {
+                id: 4,
+                title: '별빛 수변공원 야간 힐링길',
+                category: 'night',
+                categoryLabel: '야간/힐링',
+                distance: '4.0 km',
+                duration: '약 55분',
+                meeting: '수변공원 음악분수대 앞 벤치',
+                summary: '하루 일과를 마치고 은은한 가로등 불빛과 강바람을 맞으며 스트레스를 비우는 밤 산책입니다.',
+                route: '음악분수대 → 달빛 산책교 → 갈대숲 조명길 → 강변 전망 데크 → 분수대 복귀',
+                tips: '조명이 밝고 안전하게 조성된 코스입니다. 밤공기가 선선할 수 있으니 가벼운 바람막이 재킷을 걸치고 오세요.'
+            },
+            {
+                id: 5,
+                title: '댕댕이와 함께하는 햇살 잔디길',
+                category: 'beginner',
+                categoryLabel: '초급(산책형)',
+                distance: '3.2 km',
+                duration: '약 50분',
+                meeting: '반려견 놀이터 옆 햇살광장',
+                summary: '반려견과 보호자가 나란히 발맞추어 걷는 주말 아침 펫 프렌들리 산책 코스입니다.',
+                route: '햇살광장 출발 → 강변 잔디 산책로 → 반려견 음수대 쉼터 → 벚꽃길 반환',
+                tips: '반려견 동반 시 리드줄(목줄) 및 배변봉투 필수 지참! 반려견이 없는 이웃분들도 강아지들과 인사하며 함께 걸으실 수 있어요.'
+            },
+            {
+                id: 6,
+                title: '옛기찻길 은행나무 능선 코스',
+                category: 'intermediate',
+                categoryLabel: '중급(둘레길)',
+                distance: '5.8 km',
+                duration: '약 85분',
+                meeting: '구 역사 문화공원 광장',
+                summary: '옛 철길의 정취와 낮은 구릉지 숲길을 연결한 걷기 좋은 중장거리 순환 코스입니다.',
+                route: '구 역사 광장 → 은행나무 철길 산책로 → 고개마루 쉼터 → 연꽃 생태연못 → 광장 복귀',
+                tips: '중간 오르막 구간이 2곳 있어 유산소 운동 효과가 뛰어납니다. 500ml 이상 충분한 수분을 챙겨오세요.'
+            }
+        ];
+
+        const INITIAL_SCHEDULES = [
+            {
+                id: 'sch-tue',
+                dayBadge: '이번 주 화요일',
+                dateStr: '11월 24일 (화) 저녁 19:30',
+                courseName: '별빛 수변공원 야간 힐링길',
+                level: '야간/힐링 · 4.0km',
+                leader: '숲길지기 리더',
+                currentCount: 11,
+                maxCount: 15
+            },
+            {
+                id: 'sch-thu',
+                dayBadge: '이번 주 목요일',
+                dateStr: '11월 26일 (목) 저녁 19:30',
+                courseName: '벚꽃 물길따라 생태하천 코스',
+                level: '초급(산책형) · 4.2km',
+                leader: '초록발걸음 부리더',
+                currentCount: 14,
+                maxCount: 16
+            },
+            {
+                id: 'sch-sat',
+                dayBadge: '이번 주 토요일',
+                dateStr: '11월 28일 (토) 오전 08:00',
+                courseName: '남산자락 전망대 둘레길',
+                level: '중급(둘레길) · 6.8km',
+                leader: '산바람 리더',
+                currentCount: 9,
+                maxCount: 12
+            }
+        ];
+
+        const INITIAL_REVIEWS = [
+            {
+                id: 101,
+                author: '햇살산책러',
+                course: '벚꽃 물길따라 생태하천 코스',
+                date: '2일 전',
+                content: '혼자 처음 나가서 쑥스러웠는데 리더님이 반갑게 맞아주셔서 금방 적응했어요! 1시간이 어떻게 지나갔는지 모르겠네요.'
+            },
+            {
+                id: 102,
+                author: '보리아빠',
+                course: '댕댕이와 함께하는 햇살 잔디길',
+                date: '5일 전',
+                content: '주말 아침마다 보리랑 함께 걷는데 강아지도 좋아하고 저도 체력이 훨씬 좋아졌습니다. 다음 주에도 꼭 참석할게요!'
+            },
+            {
+                id: 103,
+                author: '가을하늘',
+                course: '남산자락 전망대 둘레길',
+                date: '1주 전',
+                content: '전망대 올라가서 동네 내려다보며 마시는 물 한 모금이 최고예요. 무리하지 않고 서로 속도 맞춰주셔서 감사했습니다.'
+            }
+        ];
+
+        // ==========================================
+        // 2. 토스트 알림 유틸리티
+        // ==========================================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-forest-800 text-white border-forest-600' : 'bg-terracotta-600 text-white border-terracotta-400';
+            
+            toast.className = `toast-enter pointer-events-auto flex items-center gap-2.5 px-5 py-3.5 rounded-2xl shadow-xl border text-sm font-medium ${bgClass}`;
+            toast.innerHTML = `
+                <svg class="w-5 h-5 shrink-0 text-amber-300" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, 10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ==========================================
+        // 3. 추천 걷기 코스 렌더링 & 필터링 & 모달
+        // ==========================================
+        function getBadgeStyle(category) {
+            if (category === 'beginner') return 'bg-forest-100 text-forest-700';
+            if (category === 'intermediate') return 'bg-terracotta-100 text-terracotta-600';
+            return 'bg-indigo-100 text-indigo-800';
+        }
+
+        function renderCourses(filter = 'all') {
+            const grid = document.getElementById('course-grid');
+            const filtered = filter === 'all' ? COURSES_DATA : COURSES_DATA.filter(c => c.category === filter);
+
+            grid.innerHTML = filtered.map(course => `
+                <article data-course-id="${course.id}" class="course-card group bg-white rounded-3xl p-6 border border-beige-200 shadow-card hover:shadow-soft hover:border-forest-300 transition-all cursor-pointer flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full ${getBadgeStyle(course.category)}">
+                                ${course.categoryLabel}
+                            </span>
+                            <div class="flex items-center gap-2 text-xs font-semibold text-stone-500">
+                                <span class="bg-beige-100 px-2.5 py-1 rounded-lg text-forest-800">${course.distance}</span>
+                                <span class="bg-beige-100 px-2.5 py-1 rounded-lg text-stone-700">${course.duration}</span>
+                            </div>
+                        </div>
+
+                        <h3 class="text-lg font-extrabold text-forest-900 group-hover:text-forest-600 transition-colors mb-2">
+                            ${course.title}
+                        </h3>
+                        <p class="text-sm text-stone-600 leading-relaxed mb-4">
+                            ${course.summary}
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-beige-100 flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-1.5 text-stone-500 truncate pr-2">
+                            <svg class="w-4 h-4 text-terracotta-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span class="truncate">${course.meeting}</span>
+                        </div>
+                        <span class="font-bold text-forest-600 group-hover:translate-x-0.5 transition-transform shrink-0">
+                            상세보기 →
+                        </span>
+                    </div>
+                </article>
+            `).join('');
+
+            // 카드 클릭 시 상세 모달 오픈
+            document.querySelectorAll('.course-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const id = Number(card.dataset.courseId);
+                    const course = COURSES_DATA.find(c => c.id === id);
+                    if (course) openCourseModal(course);
+                });
+            });
+        }
+
+        // 필터 버튼 이벤트
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-forest-600', 'text-white', 'shadow-sm');
+                    b.classList.add('bg-white', 'text-stone-600', 'border', 'border-beige-200');
+                });
+                btn.classList.remove('bg-white', 'text-stone-600', 'border', 'border-beige-200');
+                btn.classList.add('bg-forest-600', 'text-white', 'shadow-sm');
+                renderCourses(btn.dataset.filter);
+            });
+        });
+
+        // 코스 상세 모달 제어
+        const modal = document.getElementById('course-modal');
+        function openCourseModal(course) {
+            document.getElementById('modal-badge').textContent = course.categoryLabel;
+            document.getElementById('modal-title').textContent = course.title;
+            document.getElementById('modal-distance').textContent = `거리: ${course.distance}`;
+            document.getElementById('modal-duration').textContent = `예상 소요시간: ${course.duration}`;
+            document.getElementById('modal-meeting').textContent = `📍 ${course.meeting}`;
+            document.getElementById('modal-route').textContent = course.route;
+            document.getElementById('modal-tips').textContent = course.tips;
+
+            const headerBg = document.getElementById('modal-header-bg');
+            headerBg.className = 'p-6 text-white relative ' + (
+                course.category === 'intermediate' ? 'bg-terracotta-600' :
+                course.category === 'night' ? 'bg-slate-800' : 'bg-forest-600'
+            );
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCourseModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        document.getElementById('close-modal-btn').addEventListener('click', closeCourseModal);
+        document.getElementById('modal-close-bottom').addEventListener('click', closeCourseModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeCourseModal();
+        });
+        document.getElementById('modal-apply-btn').addEventListener('click', () => {
+            const title = document.getElementById('modal-title').textContent;
+            closeCourseModal();
+            document.getElementById('join').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('join-message').value = `[${title}] 코스로 함께 걷고 싶어요!`;
+            showToast('참여 신청 폼에 선택한 코스가 입력되었습니다.');
+        });
+
+        // ==========================================
+        // 4. 이번 주 정기 일정 & 실시간 참석 신청(RSVP)
+        // ==========================================
+        const RSVP_STORAGE_KEY = 'dongnae_walk_rsvp_v1';
+        let userRsvps = JSON.parse(localStorage.getItem(RSVP_STORAGE_KEY) || '{}');
+
+        function renderSchedules() {
+            const container = document.getElementById('schedule-list');
+            container.innerHTML = INITIAL_SCHEDULES.map(sch => {
+                const isJoined = Boolean(userRsvps[sch.id]);
+                const totalCount = sch.currentCount + (isJoined ? 1 : 0);
+                const percent = Math.min(100, Math.round((totalCount / sch.maxCount) * 100));
+                const isFull = totalCount >= sch.maxCount && !isJoined;
+
+                return `
+                    <div class="bg-white rounded-3xl p-6 border ${isJoined ? 'border-forest-500 ring-2 ring-forest-500/20' : 'border-beige-200'} shadow-card flex flex-col justify-between transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-bold px-3 py-1 rounded-full bg-terracotta-50 text-terracotta-600">
+                                    ${sch.dayBadge}
+                                </span>
+                                <span class="text-xs font-medium text-stone-400">인솔: ${sch.leader}</span>
+                            </div>
+                            <p class="text-sm font-bold text-forest-700 mb-1">${sch.dateStr}</p>
+                            <h3 class="text-lg font-extrabold text-forest-900 mb-1.5">${sch.courseName}</h3>
+                            <p class="text-xs text-stone-500 mb-5">${sch.level}</p>
+                        </div>
+
+                        <div>
+                            <!-- 인원 프로그레스 바 -->
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-semibold mb-1.5">
+                                    <span class="text-stone-600">현재 신청 인원</span>
+                                    <span class="${isJoined ? 'text-forest-600 font-bold' : 'text-stone-700'}">
+                                        ${totalCount}명 / 정원 ${sch.maxCount}명
+                                    </span>
+                                </div>
+                                <div class="w-full h-2.5 bg-beige-200 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-500 ${isJoined ? 'bg-forest-600' : 'bg-terracotta-500'}" style="width: ${percent}%"></div>
+                                </div>
+                            </div>
+
+                            <button type="button" data-sch-id="${sch.id}" ${isFull ? 'disabled' : ''}
+                                class="rsvp-btn w-full py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${
+                                    isJoined
+                                    ? 'bg-forest-100 text-forest-800 hover:bg-forest-200 border border-forest-300'
+                                    : isFull
+                                    ? 'bg-stone-200 text-stone-400 cursor-not-allowed'
+                                    : 'bg-forest-600 hover:bg-forest-700 text-white shadow-sm'
+                                }">
+                                ${isJoined ? `
+                                    <svg class="w-4 h-4 text-forest-700" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span>참석 신청 완료 (클릭 시 취소)</span>
+                                ` : isFull ? '정원 마감' : '참석 신청하기'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.querySelectorAll('.rsvp-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.dataset.schId;
+                    const schedule = INITIAL_SCHEDULES.find(s => s.id === id);
+                    if (userRsvps[id]) {
+                        delete userRsvps[id];
+                        showToast(`'${schedule.courseName}' 참석 신청이 취소되었습니다.`, 'info');
+                    } else {
+                        userRsvps[id] = true;
+                        showToast(`'${schedule.courseName}' 참석 신청이 완료되었습니다!`);
+                    }
+                    localStorage.setItem(RSVP_STORAGE_KEY, JSON.stringify(userRsvps));
+                    renderSchedules();
+                });
+            });
+        }
+
+        // ==========================================
+        // 5. 나의 걷기 칼로리 & 걸음 수 계산기
+        // ==========================================
+        let calcMode = 'dist'; // 'dist' (km) | 'time' (min)
+        const calcInput = document.getElementById('calc-value');
+        const resultSteps = document.getElementById('result-steps');
+        const resultKcal = document.getElementById('result-kcal');
+
+        function updateCalculator() {
+            const val = parseFloat(calcInput.value);
+            if (isNaN(val) || val <= 0) {
+                resultSteps.textContent = '0';
+                resultKcal.textContent = '0';
+                return;
+            }
+
+            let steps = 0;
+            let kcal = 0;
+
+            if (calcMode === 'dist') {
+                // 1km당 평균 약 1,350보, 약 55kcal 소모 기준
+                steps = Math.round(val * 1350);
+                kcal = Math.round(val * 55);
+            } else {
+                // 1분 보통 걷기당 평균 약 105보, 약 4.2kcal 소모 기준
+                steps = Math.round(val * 105);
+                kcal = Math.round(val * 4.2);
+            }
+
+            resultSteps.textContent = steps.toLocaleString();
+            resultKcal.textContent = kcal.toLocaleString();
+        }
+
+        document.getElementById('calc-mode-dist').addEventListener('click', (e) => {
+            calcMode = 'dist';
+            e.target.className = 'calc-mode-btn py-2 text-sm font-bold rounded-lg bg-white text-forest-800 shadow-sm transition-all';
+            document.getElementById('calc-mode-time').className = 'calc-mode-btn py-2 text-sm font-medium rounded-lg text-stone-600 hover:text-forest-800 transition-all';
+            document.getElementById('calc-input-label').textContent = '걸은 거리 (km)';
+            document.getElementById('calc-unit').textContent = 'km';
+            calcInput.value = '4.2';
+            calcInput.step = '0.1';
+            document.getElementById('calc-presets').innerHTML = `
+                <button type="button" data-val="2.5" class="preset-chip text-xs bg-beige-100 hover:bg-forest-100 text-stone-700 px-2.5 py-1 rounded-lg transition-colors">2.5km (가벼운 산책)</button>
+                <button type="button" data-val="4.2" class="preset-chip text-xs bg-beige-100 hover:bg-forest-100 text-stone-700 px-2.5 py-1 rounded-lg transition-colors">4.2km (하천 코스)</button>
+                <button type="button" data-val="6.5" class="preset-chip text-xs bg-beige-100 hover:bg-forest-100 text-stone-700 px-2.5 py-1 rounded-lg transition-colors">6.5km (둘레길)</button>
+            `;
+            bindPresetChips();
+            updateCalculator();
+        });
+
+        document.getElementById('calc-mode-time').addEventListener('click', (e) => {
+            calcMode = 'time';
+            e.target.className = 'calc-mode-btn py-2 text-sm font-bold rounded-lg bg-white text-forest-800 shadow-sm transition-all';
+            document.getElementById('calc-mode-dist').className = 'calc-mode-btn py-2 text-sm font-medium rounded-lg text-stone-600 hover:text-forest-800 transition-all';
+            document.getElementById('calc-input-label').textContent = '걸은 시간 (분)';
+            document.getElementById('calc-unit').textContent = '분';
+            calcInput.value = '60';
+            calcInput.step = '5';
+            document.getElementById('calc-presets').innerHTML = `
+                <button type="button" data-val="30" class="preset-chip text-xs bg-beige-100 hover:bg-forest-100 text-stone-700 px-2.5 py-1 rounded-lg transition-colors">30분 (점심 산책)</button>
+                <button type="button" data-val="60" class="preset-chip text-xs bg-beige-100 hover:bg-forest-100 text-stone-700 px-2.5 py-1 rounded-lg transition-colors">60분 (정기 모임)</button>
+                <button type="button" data-val="90" class="preset-chip text-xs bg-beige-100 hover:bg-forest-100 text-stone-700 px-2.5 py-1 rounded-lg transition-colors">90분 (주말 둘레길)</button>
+            `;
+            bindPresetChips();
+            updateCalculator();
+        });
+
+        function bindPresetChips() {
+            document.querySelectorAll('.preset-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    calcInput.value = chip.dataset.val;
+                    updateCalculator();
+                });
+            });
+        }
+        calcInput.addEventListener('input', updateCalculator);
+        bindPresetChips();
+        updateCalculator();
+
+        // ==========================================
+        // 6. 이웃 걷기 후기 게시판 (localStorage 연동)
+        // ==========================================
+        const REVIEWS_STORAGE_KEY = 'dongnae_walk_reviews_v1';
+        let reviewsData = JSON.parse(localStorage.getItem(REVIEWS_STORAGE_KEY) || 'null') || INITIAL_REVIEWS;
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function renderReviews() {
+            const list = document.getElementById('review-list');
+            list.innerHTML = reviewsData.map(rev => `
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-beige-200 shadow-card">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-full bg-forest-100 text-forest-700 font-bold text-xs flex items-center justify-center">
+                                ${escapeHTML(rev.author.charAt(0))}
+                            </span>
+                            <span class="font-bold text-sm text-forest-900">${escapeHTML(rev.author)}</span>
+                            <span class="text-xs font-medium bg-beige-100 text-forest-700 px-2.5 py-0.5 rounded-full">
+                                ${escapeHTML(rev.course)}
+                            </span>
+                        </div>
+                        <span class="text-xs text-stone-400">${escapeHTML(rev.date)}</span>
+                    </div>
+                    <p class="text-sm text-stone-700 leading-relaxed pl-9">${escapeHTML(rev.content)}</p>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('review-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const author = document.getElementById('review-author').value.trim();
+            const course = document.getElementById('review-course').value;
+            const content = document.getElementById('review-content').value.trim();
+
+            if (!author || !content) return;
+
+            reviewsData.unshift({
+                id: Date.now(),
+                author,
+                course,
+                date: '방금 전',
+                content
+            });
+
+            localStorage.setItem(REVIEWS_STORAGE_KEY, JSON.stringify(reviewsData));
+            renderReviews();
+            e.target.reset();
+            showToast('소중한 걷기 후기가 등록되었습니다!');
+        });
+
+        // ==========================================
+        // 7. 모임 가입 신청 폼 & FAQ 아코디언
+        // ==========================================
+        document.getElementById('join-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('join-name').value.trim();
+            const time = document.getElementById('join-time').value;
+            const level = document.getElementById('join-level').value;
+
+            const successBox = document.getElementById('join-success-box');
+            document.getElementById('join-welcome-title').textContent = `${name}님, 동네한바퀴의 새 이웃이 되신 걸 환영합니다!`;
+            document.getElementById('join-welcome-desc').textContent = `선택하신 [${time} / ${level}] 일정에 맞춰 집결 안내 문자를 보내드릴게요. 편한 운동화 차림으로 곧 만나요!`;
+            
+            successBox.classList.remove('hidden');
+            showToast(`${name}님의 모임 가입 신청이 접수되었습니다!`);
+            e.target.reset();
+        });
+
+        // FAQ 아코디언 토글
+        document.querySelectorAll('.faq-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const item = trigger.closest('.faq-item');
+                const isActive = item.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // ==========================================
+        // 8. 모바일 메뉴 & 맨 위로 이동 버튼
+        // ==========================================
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const iconOpen = document.getElementById('menu-icon-open');
+        const iconClose = document.getElementById('menu-icon-close');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            iconOpen.classList.toggle('hidden', !isHidden);
+            iconClose.classList.toggle('hidden', isHidden);
+        });
+
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                iconOpen.classList.remove('hidden');
+                iconClose.classList.add('hidden');
+            });
+        });
+
+        document.getElementById('scroll-top-btn').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // 초기 렌더링 실행
+        renderCourses('all');
+        renderSchedules();
+        renderReviews();
+    </script>
+</body>
+</html>
